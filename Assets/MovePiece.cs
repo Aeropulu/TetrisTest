@@ -176,17 +176,24 @@ public class MovePiece : MonoBehaviour
 		}
 	}
 
-	private void PlacePiece()
+	private async void PlacePiece()
 	{
 		int blockCount = _blocks.Count;
+		int bottomLine = _field.yMax;
+		int topLine = 0;
+
 		for (int i = 0; i < blockCount; i++)
 		{
 			Block block = _blocks[i];
 			Vector2Int position = _currentPiece.BlockList[i] + _currentPiecePosition;
 			_field.SetBlock(position, block);
+
+			bottomLine = Mathf.Min(bottomLine, position.y);
+			topLine = Mathf.Max(topLine, position.y);
 		}
 
 		_blocks.Clear();
+		await _field.CheckAndClearLines(bottomLine, topLine);
 		_currentPiecePosition = _field.DropPoint;
 		MakePieceGameObjects();
 	}
