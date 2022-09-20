@@ -9,10 +9,10 @@ public class MovePiece : MonoBehaviour
 	[SerializeField] private PieceDispenser _pieceDispenser;
 	[SerializeField] private float _moveDownInterval = 0.1f;
 	[SerializeField] private GameObject _blockPrefab;
-	private List<Vector2Int> _blockPositions = null;
+
 	private List<Block> _blocks = null;
 	private Vector2Int _currentPiecePosition = Vector2Int.zero;
-	private float _nextMoveDown = 0.0f;
+	private float _nextMoveDownTime = 0.0f;
 
 	private Piece _currentPiece = null;
 
@@ -35,14 +35,21 @@ public class MovePiece : MonoBehaviour
 		MakePieceGameObjects();
 
 		_currentPiecePosition = _field.DropPoint;
-		_nextMoveDown = Time.time + _moveDownInterval;
+		_nextMoveDownTime = Time.time + _moveDownInterval;
 	}
 
 
 	void Update()
 	{
-		if (Time.time > _nextMoveDown || Input.GetKeyDown(KeyCode.DownArrow))
+		if (Time.time > _nextMoveDownTime)
 		{
+			_nextMoveDownTime += _moveDownInterval;
+			MoveDown();
+		}
+
+		if (Input.GetKeyDown(KeyCode.DownArrow))
+		{
+			_nextMoveDownTime = Time.time + _moveDownInterval;
 			MoveDown();
 		}
 
@@ -64,24 +71,54 @@ public class MovePiece : MonoBehaviour
 
 	private void MoveDown()
 	{
-		_nextMoveDown += _moveDownInterval;
-		_currentPiecePosition += Vector2Int.down;
+		Vector2Int nextPosition = _currentPiecePosition + Vector2Int.down;
 
-		if (CheckIfBlocked() || CheckIfBottom())
+		if (CheckIfBlocked(_currentPiece.BlockList, nextPosition) || CheckIfBottom(_currentPiece.BlockList, nextPosition))
 		{
-			_currentPiecePosition += Vector2Int.up;
 			PlacePiece();
 		}
+		else
+		{
+			_currentPiecePosition = nextPosition;
+			UpdateBlockObjects();
+		}
+	}
+	
+	private void MoveSide(int amount)
+	{
+		Vector2Int nextPosition = _currentPiecePosition + new Vector2Int(amount, 0);
 
+		if (CheckIfBlocked(_currentPiece.BlockList, nextPosition))
+		{
+			return;
+		}
+
+		nextPosition = KeepInsideField(_currentPiece.BlockList, nextPosition);
+		_currentPiecePosition = nextPosition;
 		UpdateBlockObjects();
 	}
 
-	private bool CheckIfBottom()
+	private void Rotate()
 	{
-		int blockCount = _blocks.Count;
+		List<Vector2Int> rotatedList = _currentPiece.RotatedBlockList;
+		Vector2Int nextPosition = KeepInsideField(rotatedList, _currentPiecePosition);
+		if (CheckIfBlocked(rotatedList, nextPosition) || CheckIfBottom(rotatedList, nextPosition))
+		{
+			// Can't rotate here.
+			return;
+		}
+
+		_currentPiecePosition = nextPosition;
+		_currentPiece.Rotate();
+		UpdateBlockObjects();
+	}
+
+	private bool CheckIfBottom(List<Vector2Int> blockList, Vector2Int piecePosition)
+	{
+		int blockCount = blockList.Count;
 		for (int i = 0; i < blockCount; i++)
 		{
-			Vector2Int position = _blockPositions[i] + _currentPiecePosition;
+			Vector2Int position = blockList[i] + piecePosition;
 			if (position.y < _field.yMin)
 			{
 				return true;
@@ -91,56 +128,28 @@ public class MovePiece : MonoBehaviour
 		return false;
 	}
 
-	private void MoveSide(int amount)
+	private bool CheckIfBlocked(List<Vector2Int> blockList, Vector2Int piecePosition)
 	{
-		Vector2Int moveVector = new Vector2Int(amount, 0);
-		_currentPiecePosition += moveVector;
-
-		if (CheckIfBlocked())
-		{
-			_currentPiecePosition -= moveVector;
-		}
-
-		KeepInsideField();
-
-		UpdateBlockObjects();
-	}
-
-	private bool CheckIfBlocked()
-	{
-		int blockCount = _blocks.Count;
+		int blockCount = blockList.Count;
 		for (int i = 0; i < blockCount; i++)
 		{
-			Block block = _blocks[i];
-			Vector2Int position = _blockPositions[i] + _currentPiecePosition;
-			if (_field.GetBlock(position) != null)
+			Vector2Int blockPosition = blockList[i] + piecePosition;
+			if (_field.GetBlock(blockPosition) != null)
 			{
 				return true;
 			}
 		}
 
-
 		return false;
 	}
 
-	private void Rotate()
-	{
-		int blockCount = _blocks.Count;
-		_currentPiece.Rotate();
-		_blockPositions = _currentPiece.BlockList;
-
-		KeepInsideField();
-
-		UpdateBlockObjects();
-	}
-
-	private void KeepInsideField()
+	private Vector2Int KeepInsideField(List<Vector2Int> blockList, Vector2Int piecePosition)
 	{
 		int offset = 0;
-		int blockCount = _blocks.Count;
+		int blockCount = blockList.Count;
 		for (int i = 0; i < blockCount; i++)
 		{
-			Vector2Int position = _blockPositions[i] + _currentPiecePosition;
+			Vector2Int position = blockList[i] + piecePosition;
 
 			if (position.x < _field.xMin)
 			{
@@ -153,7 +162,7 @@ public class MovePiece : MonoBehaviour
 			}
 		}
 
-		_currentPiecePosition += new Vector2Int(offset, 0);
+		return piecePosition + new Vector2Int(offset, 0);
 	}
 
 	private void UpdateBlockObjects()
@@ -162,7 +171,7 @@ public class MovePiece : MonoBehaviour
 		for (int i = 0; i < blockCount; i++)
 		{
 			Block block = _blocks[i];
-			block.transform.position = GridToWorldPosition(_blockPositions[i]);
+			block.transform.position = GridToWorldPosition(_currentPiece.BlockList[i]);
 		}
 	}
 
@@ -172,7 +181,7 @@ public class MovePiece : MonoBehaviour
 		for (int i = 0; i < blockCount; i++)
 		{
 			Block block = _blocks[i];
-			Vector2Int position = _blockPositions[i] + _currentPiecePosition;
+			Vector2Int position = _currentPiece.BlockList[i] + _currentPiecePosition;
 			_field.SetBlock(position, block);
 		}
 
@@ -184,16 +193,15 @@ public class MovePiece : MonoBehaviour
 	private void MakePieceGameObjects()
 	{
 		_currentPiece = _pieceDispenser.GetNext();
-		_blockPositions = _currentPiece.BlockList;
 
-		if (_blockPrefab == null || _blockPositions == null)
+		if (_blockPrefab == null || _currentPiece.BlockList == null)
 		{
 			return;
 		}
 
 		_blocks.Clear();
 
-		foreach(Vector2Int blockPosition in _blockPositions)
+		foreach(Vector2Int blockPosition in _currentPiece.BlockList)
 		{
 			GameObject blockObject = Instantiate(_blockPrefab);
 			Block block = blockObject.GetComponent<Block>();
