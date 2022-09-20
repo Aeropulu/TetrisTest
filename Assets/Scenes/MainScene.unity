@@ -566,8 +566,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pieceList:
-  - {fileID: 11400000, guid: 13c2ef40fef6d4548bd67a611447e5d8, type: 2}
+  - {fileID: 11400000, guid: 5ed23093e37bae74781671b6d69aa5aa, type: 2}
+  - {fileID: 11400000, guid: fba523efe6200f7439f955c0976e191f, type: 2}
+  - {fileID: 11400000, guid: d074b7b5d8cdbfb47aaebba3f6419e26, type: 2}
   - {fileID: 11400000, guid: cde6b4b3753a91f4ab37f4e6f7ebbd77, type: 2}
+  - {fileID: 11400000, guid: 13c2ef40fef6d4548bd67a611447e5d8, type: 2}
+  - {fileID: 11400000, guid: de6df7c68c7147d46b64500d58482f3d, type: 2}
+  - {fileID: 11400000, guid: fb8ecea5cd503384283cd4a5fdea2007, type: 2}
 --- !u!4 &1676658404
 Transform:
   m_ObjectHideFlags: 0
