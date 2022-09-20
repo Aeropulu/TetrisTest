@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50663be5b729c6f4cbd9d4d1bdd18e20, type: 3}
-  m_Name: New Piece
+  m_Name: O piece
   m_EditorClassIdentifier: 
-  _blockSetup:
+  _color: {r: 0.8490566, g: 0.8439, b: 0.052064814, a: 1}
+  _rotationFrames:
   - _blockList:
     - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-    - {x: 0, y: 0}
-  - _blockList: []
+    - {x: 0, y: 1}
+    - {x: 1, y: 0}
+    - {x: 1, y: 1}

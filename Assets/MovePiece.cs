@@ -6,12 +6,15 @@ using UnityEngine;
 public class MovePiece : MonoBehaviour
 {
 	[SerializeField] private TetrisField _field;
+	[SerializeField] private PieceDispenser _pieceDispenser;
 	[SerializeField] private float _moveDownInterval = 0.1f;
 	[SerializeField] private GameObject _blockPrefab;
-	[SerializeField] private List<Vector2Int> _blockPositions = new List<Vector2Int>();
+	private List<Vector2Int> _blockPositions = null;
 	private List<Block> _blocks = null;
 	private Vector2Int _currentPiecePosition = Vector2Int.zero;
 	private float _nextMoveDown = 0.0f;
+
+	private Piece _currentPiece = null;
 
 	void Start()
 	{
@@ -21,8 +24,15 @@ public class MovePiece : MonoBehaviour
 			return;
 		}
 
+		if (_pieceDispenser == null)
+		{
+			Debug.LogError("Piece Dispenser not assigned on MovePiece");
+			return;
+		}
+
 		_blocks = new List<Block>(4);
-		MakePiece();
+		
+		MakePieceGameObjects();
 
 		_currentPiecePosition = _field.DropPoint;
 		_nextMoveDown = Time.time + _moveDownInterval;
@@ -116,12 +126,8 @@ public class MovePiece : MonoBehaviour
 	private void Rotate()
 	{
 		int blockCount = _blocks.Count;
-		for (int i = 0; i < blockCount; i++)
-		{
-			Block block = _blocks[i];
-			Vector2Int currentBlockPosition = _blockPositions[i];
-			_blockPositions[i] = new Vector2Int(- currentBlockPosition.y, currentBlockPosition.x);
-		}
+		_currentPiece.Rotate();
+		_blockPositions = _currentPiece.BlockList;
 
 		KeepInsideField();
 
@@ -172,11 +178,14 @@ public class MovePiece : MonoBehaviour
 
 		_blocks.Clear();
 		_currentPiecePosition = _field.DropPoint;
-		MakePiece();
+		MakePieceGameObjects();
 	}
 
-	private void MakePiece()
+	private void MakePieceGameObjects()
 	{
+		_currentPiece = _pieceDispenser.GetNext();
+		_blockPositions = _currentPiece.BlockList;
+
 		if (_blockPrefab == null || _blockPositions == null)
 		{
 			return;
@@ -189,6 +198,8 @@ public class MovePiece : MonoBehaviour
 			GameObject blockObject = Instantiate(_blockPrefab);
 			Block block = blockObject.GetComponent<Block>();
 			_blocks.Add(block);
+			SpriteRenderer spriteRenderer = blockObject.GetComponent<SpriteRenderer>();
+			spriteRenderer.color = _currentPiece.Color;
 
 			blockObject.transform.position = GridToWorldPosition(blockPosition);
 		}
