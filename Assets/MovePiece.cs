@@ -31,10 +31,11 @@ public class MovePiece : MonoBehaviour
 		}
 
 		_blocks = new List<Block>(4);
-		
-		MakePieceGameObjects();
 
 		_currentPiecePosition = _field.DropPoint;
+		MakePieceGameObjects();
+
+		
 		_nextMoveDownTime = Time.time + _moveDownInterval;
 	}
 
