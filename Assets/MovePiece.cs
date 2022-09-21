@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MovePiece : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class MovePiece : MonoBehaviour
 	[SerializeField] private PieceDispenser _pieceDispenser;
 	[SerializeField] private float _moveDownInterval = 0.1f;
 	[SerializeField] private GameObject _blockPrefab;
+	[SerializeField] private UnityEvent _gameOverEvent = new UnityEvent();
 
 	private List<Block> _blocks = null;
 	private Vector2Int _currentPiecePosition = Vector2Int.zero;
@@ -226,6 +228,12 @@ public class MovePiece : MonoBehaviour
 			spriteRenderer.color = _currentPiece.Color;
 
 			blockObject.transform.position = GridToWorldPosition(blockPosition);
+		}
+
+		if (CheckIfBlocked(_currentPiece.BlockList, _currentPiecePosition))
+		{
+			// Game Over.
+			_gameOverEvent.Invoke();
 		}
 	}
 

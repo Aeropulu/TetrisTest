@@ -7,7 +7,7 @@ using UnityEngine;
 public class TetrisField : MonoBehaviour
 {
 	[SerializeField] private int width = 10;
-	[SerializeField] private int height = 21;
+	[SerializeField] private int height = 42;
 	private Block[,] _blocks;
 	private List<int> _linesToClear = new List<int>(4);
 	private List<Vector2Int> _blocksToClear = new List<Vector2Int>(40);
@@ -17,7 +17,7 @@ public class TetrisField : MonoBehaviour
 	public int xMax { get { return width - 1; }}
 	public int yMin { get { return 0; }}
 	public int yMax { get { return height - 1; }}
-	public Vector2Int DropPoint { get { return new Vector2Int(width / 2, height); }}
+	public Vector2Int DropPoint { get { return new Vector2Int(width / 2, height / 2); }}
 	public bool IsClearingLines { get { return _isClearingLines; }}
 
 	private void Start()

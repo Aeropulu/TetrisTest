@@ -237,9 +237,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _field: {fileID: 2054236096}
   _pieceDispenser: {fileID: 1676658403}
-  _moveDownInterval: 0.1
+  _moveDownInterval: 0.33
   _blockPrefab: {fileID: 177383572825039340, guid: f6d0d7dbdbf61c043beee6db6d427281,
     type: 3}
+  _gameOverEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 562816933}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &562816934
 Transform:
   m_ObjectHideFlags: 0
@@ -617,7 +632,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 10
-  height: 21
+  height: 42
 --- !u!4 &2054236097
 Transform:
   m_ObjectHideFlags: 0
