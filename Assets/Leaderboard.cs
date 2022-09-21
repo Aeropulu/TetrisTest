@@ -71,6 +71,11 @@ public class Leaderboard : MonoBehaviour
 
 	private void InsertHighScore(int index, string nickName, int score)
 	{
+		if (index >= _numEntries)
+		{
+			return;
+		}
+
 		for (int i = _numEntries - 1; i > index; i--)
 		{
 			_nicknames[i] = _nicknames[i - 1];

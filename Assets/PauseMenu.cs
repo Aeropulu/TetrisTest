@@ -79,6 +79,7 @@ public class PauseMenu : MonoBehaviour
 	public void NewGame()
 	{
 		_field.Clear();
+		_scoreManager.ResetScore();
 		_movePiece.NewGame();
 
 		_pauseManager.SetPause(false);
@@ -90,6 +91,12 @@ public class PauseMenu : MonoBehaviour
 		_movePiece.EndGame();
 	}
 
+	public void OnGameOver()
+	{
+		TryNewHighScore();
+		ShowLeaderBoard();
+	}
+
 	public void QuitGame()
 	{
 		Application.Quit();
@@ -98,6 +105,7 @@ public class PauseMenu : MonoBehaviour
 	public void ShowLeaderBoard()
 	{
 		SetLeaderboardVisible(true);
+		enabled = false;
 	}
 
 	public void ChangeLanguage(int index)
