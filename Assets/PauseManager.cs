@@ -9,13 +9,7 @@ public class PauseManager : MonoBehaviour
     [SerializeField] private List<MonoBehaviour> _pausables = new List<MonoBehaviour>();
     [SerializeField] private UnityEvent<bool> _pausedEvent = new UnityEvent<bool>();
     private bool _isPaused = false;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -24,9 +18,9 @@ public class PauseManager : MonoBehaviour
         }
     }
 
-	public void Pause(bool paused = true)
+	public void SetPause(bool paused = true)
 	{
-        _isPaused = true;
+        _isPaused = paused;
         ApplyPause();
     }
 

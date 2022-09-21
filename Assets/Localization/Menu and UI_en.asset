@@ -38,5 +38,13 @@ MonoBehaviour:
     m_Localized: Next
     m_Metadata:
       m_Items: []
+  - m_Id: 36584358535168
+    m_Localized: Resume Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46437122564096
+    m_Localized: Quit Game
+    m_Metadata:
+      m_Items: []
   references:
     version: 1

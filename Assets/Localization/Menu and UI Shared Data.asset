@@ -35,6 +35,14 @@ MonoBehaviour:
     m_Key: Next Piece Text
     m_Metadata:
       m_Items: []
+  - m_Id: 36584358535168
+    m_Key: Resume Game Button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 46437122564096
+    m_Key: Quit Game Button
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

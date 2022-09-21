@@ -17,6 +17,9 @@ public class MovePiece : MonoBehaviour
 	private float _nextMoveCountDown = 0.0f;
 
 	private Piece _currentPiece = null;
+	private bool _isGameOver = true;
+
+	public bool IsGameOver { get { return _isGameOver; } }
 
 	void Start()
 	{
@@ -33,12 +36,10 @@ public class MovePiece : MonoBehaviour
 		}
 
 		_blocks = new List<Block>(4);
-
 		_currentPiecePosition = _field.DropPoint;
-		MakePieceGameObjects();
-
-		
 		_nextMoveCountDown = _moveDownInterval;
+
+		enabled = false;
 	}
 
 
@@ -86,6 +87,26 @@ public class MovePiece : MonoBehaviour
 			_nextMoveCountDown = _moveDownInterval;
 			while (MoveDown());
 		}
+	}
+
+	public void NewGame()
+	{
+		if (_blocks.Count <= 0)
+		{
+			MakePieceGameObjects();
+		}
+
+		_isGameOver = false;
+		_currentPiecePosition = _field.DropPoint;
+		_pieceDispenser.GetNext();
+		_currentPiece = _pieceDispenser.GetNext();
+		UpdateBlockObjects();
+	}
+
+	public void EndGame()
+	{
+		_isGameOver = true;
+		_gameOverEvent.Invoke();
 	}
 
 	private bool MoveDown()
@@ -242,7 +263,7 @@ public class MovePiece : MonoBehaviour
 		if (CheckIfBlocked(_currentPiece.BlockList, _currentPiecePosition))
 		{
 			// Game Over.
-			_gameOverEvent.Invoke();
+			EndGame();
 		}
 	}
 
