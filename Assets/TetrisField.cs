@@ -11,12 +11,14 @@ public class TetrisField : MonoBehaviour
 	private Block[,] _blocks;
 	private List<int> _linesToClear = new List<int>(4);
 	private List<Vector2Int> _blocksToClear = new List<Vector2Int>(40);
+	private bool _isClearingLines = false;
 	
 	public int xMin { get { return 0; }}
 	public int xMax { get { return width - 1; }}
 	public int yMin { get { return 0; }}
 	public int yMax { get { return height - 1; }}
 	public Vector2Int DropPoint { get { return new Vector2Int(width / 2, height); }}
+	public bool IsClearingLines { get { return _isClearingLines; }}
 
 	private void Start()
 	{
@@ -52,6 +54,7 @@ public class TetrisField : MonoBehaviour
 			return;
 		}
 
+		_isClearingLines = true;
 		_linesToClear.Clear();
 
 		for (int i = bottomLine; i <= topLine; i++)
@@ -63,6 +66,7 @@ public class TetrisField : MonoBehaviour
 		}
 
 		await ClearLines();
+		_isClearingLines = false;
 	}
 
 	private bool CheckLine(int line)

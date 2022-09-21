@@ -42,6 +42,14 @@ public class MovePiece : MonoBehaviour
 
 	void Update()
 	{
+
+		// Process game input here.
+		if (_field.IsClearingLines)
+		{
+			// Block input during clearing process.
+			return;
+		}
+
 		if (Time.time > _nextMoveDownTime)
 		{
 			_nextMoveDownTime += _moveDownInterval;
