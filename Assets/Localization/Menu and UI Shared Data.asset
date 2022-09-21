@@ -14,7 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TableCollectionName: Menu and UI
   m_TableCollectionNameGuidString: 7b6a1ea21317861439ff09be73ab3e6e
-  m_Entries: []
+  m_Entries:
+  - m_Id: 1439324823552
+    m_Key: New Game Button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5633750458368
+    m_Key: End Game Button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6694913564672
+    m_Key: Leaderboard Button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13048659173376
+    m_Key: Nickname Text
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13738353745920
+    m_Key: Next Piece Text
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TetrisField : MonoBehaviour
 {
 	[SerializeField] private int width = 10;
 	[SerializeField] private int height = 42;
 	[SerializeField] private float _clearLinesDelay = 0.25f;
+	[SerializeField] private UnityEvent<int> _linesClearedEvent = new UnityEvent<int>();
 	private Block[,] _blocks;
 	private List<int> _linesToClear = new List<int>(4);
 	private List<Vector2Int> _blocksToClear = new List<Vector2Int>(40);
@@ -33,6 +35,23 @@ public class TetrisField : MonoBehaviour
 		if (IsClearingLines)
 		{
 			_clearLinesCountdown -= Time.deltaTime;
+		}
+	}
+
+	public void Clear()
+	{
+		for (int j = 0; j < height; j++)
+		{
+			for (int i = 0; i < width; i++)
+			{
+				Vector2Int position = new Vector2Int(i, j);
+				Block block = GetBlock(position);
+				if (block != null)
+				{
+					SetBlock(position, null);
+					Destroy(block.gameObject);
+				}
+			}
 		}
 	}
 
@@ -160,5 +179,7 @@ public class TetrisField : MonoBehaviour
 				}
 			}
 		}
+
+		_linesClearedEvent.Invoke(linesToDrop);
 	}
 }

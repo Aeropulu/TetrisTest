@@ -17,6 +17,26 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: 7b6a1ea21317861439ff09be73ab3e6e, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 1439324823552
+    m_Localized: Start New Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5633750458368
+    m_Localized: End Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6694913564672
+    m_Localized: Leaderboard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13048659173376
+    m_Localized: 'Nickname:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13738353745920
+    m_Localized: Next
+    m_Metadata:
+      m_Items: []
   references:
     version: 1
