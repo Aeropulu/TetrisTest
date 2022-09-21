@@ -78,20 +78,27 @@ public class MovePiece : MonoBehaviour
 		{
 			Rotate();
 		}
+
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			while (MoveDown());
+		}
 	}
 
-	private void MoveDown()
+	private bool MoveDown()
 	{
 		Vector2Int nextPosition = _currentPiecePosition + Vector2Int.down;
 
 		if (CheckIfBlocked(_currentPiece.BlockList, nextPosition) || CheckIfBottom(_currentPiece.BlockList, nextPosition))
 		{
 			PlacePiece();
+			return false;
 		}
 		else
 		{
 			_currentPiecePosition = nextPosition;
 			UpdateBlockObjects();
+			return true;
 		}
 	}
 	
