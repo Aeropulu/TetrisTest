@@ -14,7 +14,7 @@ public class MovePiece : MonoBehaviour
 
 	private List<Block> _blocks = null;
 	private Vector2Int _currentPiecePosition = Vector2Int.zero;
-	private float _nextMoveDownTime = 0.0f;
+	private float _nextMoveCountDown = 0.0f;
 
 	private Piece _currentPiece = null;
 
@@ -38,7 +38,7 @@ public class MovePiece : MonoBehaviour
 		MakePieceGameObjects();
 
 		
-		_nextMoveDownTime = Time.time + _moveDownInterval;
+		_nextMoveCountDown = _moveDownInterval;
 	}
 
 
@@ -52,15 +52,17 @@ public class MovePiece : MonoBehaviour
 			return;
 		}
 
-		if (Time.time > _nextMoveDownTime)
+		_nextMoveCountDown -= Time.deltaTime;
+
+		if (_nextMoveCountDown < 0.0f)
 		{
-			_nextMoveDownTime += _moveDownInterval;
+			_nextMoveCountDown += _moveDownInterval;
 			MoveDown();
 		}
 
 		if (Input.GetKeyDown(KeyCode.DownArrow))
 		{
-			_nextMoveDownTime = Time.time + _moveDownInterval;
+			_nextMoveCountDown = _moveDownInterval;
 			MoveDown();
 		}
 
@@ -81,6 +83,7 @@ public class MovePiece : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
+			_nextMoveCountDown = _moveDownInterval;
 			while (MoveDown());
 		}
 	}

@@ -8,10 +8,13 @@ public class TetrisField : MonoBehaviour
 {
 	[SerializeField] private int width = 10;
 	[SerializeField] private int height = 42;
+	[SerializeField] private float _clearLinesDelay = 0.25f;
 	private Block[,] _blocks;
 	private List<int> _linesToClear = new List<int>(4);
 	private List<Vector2Int> _blocksToClear = new List<Vector2Int>(40);
 	private bool _isClearingLines = false;
+
+	private float _clearLinesCountdown = 0.0f;
 	
 	public int xMin { get { return 0; }}
 	public int xMax { get { return width - 1; }}
@@ -23,6 +26,14 @@ public class TetrisField : MonoBehaviour
 	private void Start()
 	{
 		_blocks = new Block[width,height];
+	}
+
+	private void Update()
+	{
+		if (IsClearingLines)
+		{
+			_clearLinesCountdown -= Time.deltaTime;
+		}
 	}
 
 	public Block GetBlock(Vector2Int position)
@@ -113,7 +124,12 @@ public class TetrisField : MonoBehaviour
 			Destroy(GetBlock(position).gameObject);
 			SetBlock(position, null);
 		}
-		await Task.Delay(250);
+		//await Task.Delay(250);
+		_clearLinesCountdown = _clearLinesDelay;
+		while (_clearLinesCountdown > 0.0f)
+		{
+			await Task.Yield();
+		}
 	}
 
 	private void DropLines()
