@@ -224,8 +224,7 @@ public class MovePiece : MonoBehaviour
 			GameObject blockObject = Instantiate(_blockPrefab);
 			Block block = blockObject.GetComponent<Block>();
 			_blocks.Add(block);
-			SpriteRenderer spriteRenderer = blockObject.GetComponent<SpriteRenderer>();
-			spriteRenderer.color = _currentPiece.Color;
+			block.SetColor(_currentPiece.Color);
 
 			blockObject.transform.position = GridToWorldPosition(blockPosition);
 		}
