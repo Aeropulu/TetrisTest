@@ -29,6 +29,11 @@ public class Piece : ScriptableObject
 		_currentFrameIndex = GetNextFrameIndex();
 	}
 
+	public void ResetRotation()
+	{
+		_currentFrameIndex = 0;
+	}
+
 	private int GetNextFrameIndex()
 	{
 		int frameCount = _rotationFrames.Count;
