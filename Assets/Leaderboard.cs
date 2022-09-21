@@ -48,6 +48,9 @@ public class Leaderboard : MonoBehaviour
 			return;
 		}
 
+		// A bit overkill just to reset the highlight.
+		UpdateUI();
+
 		for (int i = _numEntries - 1; i > 0; i--)
 		{
 			int storedScore = _scores[i];
@@ -55,17 +58,18 @@ public class Leaderboard : MonoBehaviour
 			{
 				InsertHighScore(i + 1, nickName, score);
 				SaveScores();
-				UpdateUI();
+				UpdateUI(i + 1);
 				return;
 			}
 		}
 	}
 
-	private void UpdateUI()
+	private void UpdateUI(int highlightIndex = -1)
 	{
 		for (int i = 0; i < _numEntries; i ++)
 		{
-			_entriesUI[i].SetValues(_nicknames[i], _scores[i]);
+			bool shouldHilight = highlightIndex == i;
+			_entriesUI[i].SetValues(_nicknames[i], _scores[i], shouldHilight);
 		}
 	}
 
